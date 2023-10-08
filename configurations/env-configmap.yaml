@@ -3,14 +3,12 @@ kind: ConfigMap
 metadata:
   name: env-config
 data:
-  POSTGRES_USERNAME: postgres
-  POSTGRES_PASSWORD: '12345678'
   POSTGRES_HOST: postgres.ccex3o3djz0i.us-east-1.rds.amazonaws.com
   POSTGRES_DB: postgres
   AWS_BUCKET: bucket08042023
   AWS_REGION: us-east-1
   AWS_PROFILE: default
   JWT_SECRET: testing
-  URL: http://localhost:8100
+  URL: http://a3faf34f102a6496b89dcd016b870f2d-1785882711.us-east-1.elb.amazonaws.com:8100
 
   
