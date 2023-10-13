@@ -32,7 +32,7 @@ jobs:
             docker tag udagram-reverseproxy devopnguyenan88/udagram-reverseproxy-two:v1a
             docker tag udagram-api-feed devopnguyenan88/udagram-api-feed-two:v1a
             docker tag udagram-api-user devopnguyenan88/udagram-api-user-two:v1a
-            docker tag udagram-frontend devopnguyenan88/udagram-frontend:v1a
+            docker tag udagram-frontend devopnguyenan88/udagram-frontend:v1b
 
 
             echo "-------- After success----------"
@@ -45,7 +45,7 @@ jobs:
             docker push devopnguyenan88/udagram-reverseproxy-two:v1a
             docker push devopnguyenan88/udagram-api-feed-two:v1a
             docker push devopnguyenan88/udagram-api-user-two:v1a
-            docker push devopnguyenan88/udagram-frontend:v1a
+            docker push devopnguyenan88/udagram-frontend:v1b
             
 
 workflows:
