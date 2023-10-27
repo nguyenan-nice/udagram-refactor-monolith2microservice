@@ -1,58 +1,53 @@
+
 version: 2.1
 
-jobs:
-  lint-app:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-  build-docker:
-    machine: true
-    steps:
-      - checkout
-      - run:
-          name: Build docker container for each microservices
-          command: |
-            echo "--------- Installing dependencies-----------"
-            sudo apt autoremove
-            sudo apt update
-            sudo curl -LO https://nodejs.org/dist/v18.0.0/node-v18.0.0-linux-x64.tar.xz
-            sudo tar -xvf node-v18.0.0-linux-x64.tar.xz
-            sudo cp -r node-v18.0.0-linux-x64/{bin,include,lib,share} /usr/
-            node --version => v18.0.0
-            sudo apt install nodejs
-
-            echo "--------- The images is Building ------------"
-
-            docker build -t udagram-reverseproxy ./udagram-reverseproxy
-            docker build -t udagram-api-feed ./udagram-api-feed
-            docker build -t udagram-api-user ./udagram-api-user
-            docker build -t udagram-frontend ./udagram-frontend
-
-            docker tag udagram-reverseproxy devopnguyenan88/udagram-reverseproxy-two:v1a
-            docker tag udagram-api-feed devopnguyenan88/udagram-api-feed-two:v1a
-            docker tag udagram-api-user devopnguyenan88/udagram-api-user-two:v1a
-            docker tag udagram-frontend devopnguyenan88/udagram-frontend:v1b
-
-
-            echo "-------- After success----------"
-            echo " ------- login in to hub--------"
-
-            docker login -u devopnguyenan88 -p $DOCKERPASS
-
-            echo "-------------- Pushing images to dockerhub-------"
-
-            docker push devopnguyenan88/udagram-reverseproxy-two:v1a
-            docker push devopnguyenan88/udagram-api-feed-two:v1a
-            docker push devopnguyenan88/udagram-api-user-two:v1a
-            docker push devopnguyenan88/udagram-frontend:v1b
-            
-
 workflows:
-  default:
+  build:
     jobs:
-      - lint-app
-      - build-docker:
-          requires: [lint-app]
+      - build
+jobs:
+    build:
+        working_directory: ~/circleci-starter
+        docker:
+            - image: cimg/base:2022.09
+            - image: cimg/node:14.15.0 # Primary execution image
+        steps:
+            - checkout
+            - setup_remote_docker:
+                version: 20.10.14
+            - run:
+                name: build
+                command: |
+                    # Build
+                      echo '_____________beginning build'
+                      #docker build -t udagram-api-feed:v4a ./udagram-api-feed
+                      #docker build -t udagram-api-user:v4a ./udagram-api-user
+                      #docker build -t udagram-frontend:v4a ./udagram-frontend
+                      #docker build -t reverseproxy:v4a ./udagram-reverseproxy  
 
+                      # Tagging
+                      echo '_____________beginning tag'
+                      #docker tag udagram-api-feed:v4a devopnguyenan88/udagram-api-feed:v4a
+                      #docker tag udagram-api-user:v4a devopnguyenan88/udagram-api-user:v4a
+                      #docker tag udagram-frontend:v4a devopnguyenan88/udagram-frontend:v4a
+                      #docker tag reverseproxy:v4a devopnguyenan88/reverseproxy:v4a
 
+                      echo 'DOCKER IMAGE LS____'
+                      docker image ls
+
+            - run:
+                name: after_success
+                command: |
+                    # Assuming DOCKERPASS and DOCKER_USERNAME are set in the Travis repository settings
+                    # Login Docker  
+                    echo '________LOGIN_______'
+                    #- docker login -u=devopnguyenan88 -p=xxxxxx
+                    #docker login -u="$DOCKER_USERNAME" -p="$DOCKERPASS"
+                    #- echo 'username, password'  $DOCKER_USERNAME $DOCKERPASS
+                    # Pushing 
+                    echo '_____________beginning push image'
+                    #docker push devopnguyenan88/udagram-api-feed:v4a
+                    #docker push devopnguyenan88/udagram-api-user:v4a
+                    #docker push devopnguyenan88/udagram-frontend:v4a
+                    #docker push devopnguyenan88/reverseproxy:v4a
+          
